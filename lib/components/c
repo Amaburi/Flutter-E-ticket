@@ -1,0 +1,29 @@
+void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+  Future ResetPassword () async{
+    try{
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: _emailController.text.trim());
+
+      showDialog(context: context, builder: (context){
+        return AlertDialog(
+          content: Text('Password Link Sent! check your email!'),
+        );
+
+      });
+
+    } on FirebaseAuthException catch (err){
+      print(err);
+      showDialog(
+        context: context,
+        // false = user must tap button, true = tap outside dialog
+        builder: (BuildContext dialogContext) {
+          return AlertDialog(
+            title: Text('The Error'),
+            content: Text(err.toString().toLowerCase()),
+          );
+        },
+      );
+    }
+  }

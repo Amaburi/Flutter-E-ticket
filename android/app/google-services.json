@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "395242380630",
+    "project_id": "frbsauthh",
+    "storage_bucket": "frbsauthh.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:395242380630:android:f8390c5d6e102d90498af7",
+        "android_client_info": {
+          "package_name": "com.example.nyobaauth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "395242380630-8sg7f52esq0vgl5qnj1gnpobtu8sh22n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCx3A049urQYAs3sc1XdVTBChalq72EtyU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "395242380630-8sg7f52esq0vgl5qnj1gnpobtu8sh22n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
