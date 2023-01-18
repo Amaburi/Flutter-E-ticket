@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
+import 'package:nyobaauth/Screens/Users/UserHome.dart';
 import 'package:nyobaauth/Screens/forgetpass/forgetpass_screen.dart';
 import 'package:nyobaauth/Screens/forgetpass/components/ForgotPass.dart';
 import 'package:nyobaauth/home.dart';
@@ -8,11 +10,13 @@ import 'package:nyobaauth/home.dart';
 import '../../../components/already_have_an_account_acheck.dart';
 import '../../../constants.dart';
 import '../../Signup/signup_screen.dart';
+import '../../Signup/components/signup_form.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({
     Key? key,
   }) : super(key: key);
+
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -20,18 +24,36 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm>{
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool? user;
+
+  void route() {
+    User? user = FirebaseAuth.instance.currentUser;
+    FirebaseFirestore.instance.collection('Users').doc(user!.uid).get().then((DocumentSnapshot documentSnapshot){
+      if('role' == "User"){
+        Navigator.push(
+          context, MaterialPageRoute(
+          builder: (context) {
+            return UserHome();
+          },
+        ),
+        );
+      }else{
+        Navigator.push(
+          context, MaterialPageRoute(
+          builder: (context) {
+            return HomeScreen();
+          },
+        ),
+        );
+      }
+    });
+  }
 
   Future SignIn() async{
-    await FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailController.text, password: _passwordController.text);
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          return Home();
-        },
-      ),
-    );
+    await FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailController.text.trim(), password: _passwordController.text.trim());
+    route();
   }
+
 
   void dispose() {
     _emailController.dispose();

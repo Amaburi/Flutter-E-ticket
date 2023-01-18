@@ -1,29 +1,77 @@
-void dispose() {
-    _emailController.dispose();
-    super.dispose();
-  }
-  Future ResetPassword () async{
-    try{
-      await FirebaseAuth.instance.sendPasswordResetEmail(email: _emailController.text.trim());
+MaterialButton(onPressed: (){
+              FirebaseAuth.instance.signOut();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return WelcomeScreen();
+                  },
+                ),
+              );
+            },
+              color: Colors.amber,
+              child: Text('Sign Out'),
+            ),
 
-      showDialog(context: context, builder: (context){
-        return AlertDialog(
-          content: Text('Password Link Sent! check your email!'),
-        );
 
-      });
 
-    } on FirebaseAuthException catch (err){
-      print(err);
-      showDialog(
-        context: context,
-        // false = user must tap button, true = tap outside dialog
-        builder: (BuildContext dialogContext) {
-          return AlertDialog(
-            title: Text('The Error'),
-            content: Text(err.toString().toLowerCase()),
-          );
-        },
-      );
-    }
-  }
+            return FutureBuilder<List<Data>>(
+                  future: fetchData(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Container(
+                              height: 75,
+                              color: Colors.white,
+                              child: Center(
+                                child: Text(snapshot.data![index].title),
+                              ),
+                            );
+                          });
+                    } else if (snapshot.hasError) {
+                      return Text(snapshot.error.toString());
+                    }
+                    // By default show a loading spinner.
+                    return const CircularProgressIndicator();
+                  },
+                );
+
+
+
+
+return Card(
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              child: Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: (){
+
+                                    },
+                                    child: Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Icon(FontAwesomeIcons.ticket),
+                                          Text(ticket[index].type),
+                                          // Text(ticket[index].type.toString()),
+                                          SizedBox(height: 5,),
+                                          Icon(FontAwesomeIcons.calendarDays),
+                                          Text(ticket[index].date),
+                                          SizedBox(height: 5,),
+                                          Icon(FontAwesomeIcons.person),
+                                          // Text(ticket[index].quantity.toString()),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+
+
+
+                          child: Text(snapshot.data![index].type),
