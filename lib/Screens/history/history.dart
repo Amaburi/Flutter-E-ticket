@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:nyobaauth/Model/TicketDummy.dart';
+import 'package:nyobaauth/Model/transaction.dart';
 import 'package:nyobaauth/Screens/userdetails/userdetails.dart';
 import 'package:nyobaauth/home.dart';
 import 'package:nyobaauth/services/remote_service.dart';
@@ -20,16 +21,16 @@ class history extends StatefulWidget {
 
 class _historyState extends State<history> {
 
-  Future<List<Ticket>>? fetchData() async {
+  Future<List<Transaction>> fetchData() async {
 
-    var url = Uri.parse('https://jsonplaceholder.typicode.com/posts/1/comments');
-    final response = await http.get(url);
-    if (response.statusCode == 200) {
-      List jsonResponse = json.decode(response.body);
-      return jsonResponse.map((data) => Ticket.fromJson(data)).toList();
-    } else {
-      throw Exception('Unexpected error occured!');
-    }
+      var url =  Uri.parse('https://tiket.dadidu.id/api/transaction');
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        List jsonResponse = json.decode(response.body)['data'];
+        return jsonResponse.map((data) => Transaction.fromJson(data)).toList();
+      } else {
+        throw Exception('Unexpected error occured!');
+      }
   }
 
   @override
@@ -78,10 +79,19 @@ class _historyState extends State<history> {
                   )
                 },
               ),
+              GButton(icon: FontAwesomeIcons.history,text: 'History',
+                onPressed: () => {
+                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                    return history();
+                  },
+                  ),
+                  )
+                },
+              ),
             ]
         ),
       ),
-      body: FutureBuilder<List<Ticket>>(
+      body: FutureBuilder<List<Transaction>>(
           future: fetchData(),
           builder: (context, snapshot){
             if (snapshot.hasData) {
@@ -101,15 +111,27 @@ class _historyState extends State<history> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Icon(FontAwesomeIcons.ticket),
-                                    Text(snapshot.data![index].name),
+                                    Icon(FontAwesomeIcons.stopwatch),
+                                    Text('Time' ,style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w500),),
+                                    Text(snapshot.data?[index].time ?? ''),
                                     // Text(ticket[index].type.toString()),
                                     SizedBox(height: 5,),
-                                    Icon(FontAwesomeIcons.calendarDays),
-                                    Text(snapshot.data![index].email),
+                                    Icon(FontAwesomeIcons.moneyBill1),
+                                    Text('Price' , style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w500),),
+                                    Text(snapshot.data![index].price.toString()),
                                     SizedBox(height: 5,),
-                                    Icon(FontAwesomeIcons.person),
-                                    Text(snapshot.data![index].body),
+                                    Icon(FontAwesomeIcons.userAstronaut),
+                                    Text('Quantity' , style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w500),),
+                                    Text(snapshot.data![index].amount.toString()),
+                                    SizedBox(height: 5,),
+                                    Icon(FontAwesomeIcons.ticket),
+                                    Text('Ticket Number' , style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w500),),
+                                    Text(snapshot.data![index].tiket_number ?? ''),
+                                    Icon(FontAwesomeIcons.receipt),
+                                    Text('Status', style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w500),),
+                                    Text(snapshot.data![index].status ?? ''),
+                                    // Text(ticket[index].type.toString()),
+                                    SizedBox(height: 5,),
                                   ],
                                 ),
                               ),

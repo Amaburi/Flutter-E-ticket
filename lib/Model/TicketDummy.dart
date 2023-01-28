@@ -1,21 +1,23 @@
 class Ticket {
-  final int postId;
   final int id;
   final String name;
-  final String email;
-  final String body;
+  final int price;
+  final String description;
+  final int tour_id;
+
 
   Ticket({
-    required this.postId, required this.id, required this.name, required this.email, required this.body
+    required this.id, required this.name ,required this.price, required this.description, required this.tour_id
   });
 
   factory Ticket.fromJson(Map<String, dynamic> json) {
     return Ticket(
-      postId: json['postId'],
-      id: json['id'],
-      name: json['name'],
-      email: json['email'],
-      body: json['body']
+        id: json['id'],
+        name: json['name'],
+        price: json['price'],
+        description: json['description'],
+        tour_id: json['tour_id']
     );
   }
+
 }

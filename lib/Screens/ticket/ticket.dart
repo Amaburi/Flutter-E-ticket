@@ -2,12 +2,16 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:nyobaauth/Model/TicketDummy.dart';
 import 'package:nyobaauth/Screens/history/history.dart';
 import 'package:nyobaauth/Screens/userdetails/userdetails.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../../constants.dart';
-import '../../home.dart';
+import 'package:nyobaauth/home.dart';
+import 'package:nyobaauth/services/remote_service.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
+import '../../constants.dart';
+import '../ticket/ticket.dart';
 class ticket extends StatefulWidget {
   const ticket({Key? key}) : super(key: key);
 
@@ -16,21 +20,21 @@ class ticket extends StatefulWidget {
 }
 
 class _ticketState extends State<ticket> {
-  final _formKey = GlobalKey<FormState>();
 
-  var options = [
-    'Deluxe',
-    'Yaaaa',
-    'Naii'
-  ];
-  var _currentItemSelected = "Deluxe";
-  var rool = "Naii";
+  Future<List<Ticket>> fetchData() async {
+
+    var url =  Uri.parse('https://tiket.dadidu.id/api/paket');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      List jsonResponse = json.decode(response.body)['data'];
+      return jsonResponse.map((data) => Ticket.fromJson(data)).toList();
+    } else {
+      throw Exception('Unexpected error occured!');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    // double baseWidth = 360;
-    // double fem = MediaQuery.of(context).size.width / baseWidth;
-    // double ffem = fem * 0.8;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -75,103 +79,62 @@ class _ticketState extends State<ticket> {
                   )
                 },
               ),
+              GButton(icon: FontAwesomeIcons.history,text: 'History',
+                onPressed: () => {
+                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                    return history();
+                  },
+                  ),
+                  )
+                },
+              ),
             ]
         ),
       ),
-      body:  SingleChildScrollView(
-        child: Form(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: defaultPadding),
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  textInputAction: TextInputAction.next,
-                  cursorColor: kPrimaryColor,
-                  onSaved: (name) {},
-                  decoration: InputDecoration(
-                    hintText: "Quantity",
-                    prefixIcon: Padding(
-                      padding: const EdgeInsets.all(defaultPadding),
-                      child: Icon(FontAwesomeIcons.userAstronaut),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: defaultPadding),
-                child: TextFormField(
-                  keyboardType: TextInputType.datetime,
-                  textInputAction: TextInputAction.next,
-                  cursorColor: kPrimaryColor,
-                  onSaved: (email) {},
-                  decoration: InputDecoration(
-                    hintText: "Date",
-                    prefixIcon: Padding(
-                      padding: const EdgeInsets.all(defaultPadding),
-                      child: Icon(FontAwesomeIcons.calendarDays),
-                    ),
-                  ),
-                ),
-              ),
+      body: FutureBuilder<List<Ticket>>(
+        future: fetchData(),
+        builder: (context, snapshot){
+          if (snapshot.hasData) {
+            return ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (BuildContext context, index){
+                  return Card(
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: (){
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Ticket Type : ",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                  DropdownButton<String>(
-                    dropdownColor: kPrimaryColor,
-                    isDense: true,
-                    isExpanded: false,
-                    iconEnabledColor: Colors.white,
-                    focusColor: Colors.white,
-                    items: options.map((String dropDownStringItem) {
-                      return DropdownMenuItem<String>(
-                        value: dropDownStringItem,
-                        child: Text(
-                          dropDownStringItem,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                            },
+                            child: Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Icon(FontAwesomeIcons.ticket),
+                                  Text(snapshot.data![index].name),
+                                  // Text(ticket[index].type.toString()),
+                                  SizedBox(height: 5,),
+                                  Icon(FontAwesomeIcons.moneyBill1),
+                                  Text(snapshot.data![index].price.toString()),
+                                  SizedBox(height: 5,),
+                                  Icon(FontAwesomeIcons.audioDescription),
+                                  Text(snapshot.data![index].description),
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (newValueSelected) {
-                      setState(() {
-                        _currentItemSelected = newValueSelected!;
-                        rool = newValueSelected;
-                      });
-                    },
-                    value: _currentItemSelected,
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: defaultPadding / 2),
-              const SizedBox(height: defaultPadding / 2),
-              SizedBox(
-                height: 45,
-                width: 45,
-                child: IconButton(
-                  onPressed: (){
-
-                  },
-                  icon: Icon(FontAwesomeIcons.ticket, size: 55.0),
-
-                ),
-              ),
-            ],
-          ),
-        ),
+                        ],
+                      ),
+                    ),
+                  );
+                });
+          } else if (snapshot.hasError) {
+            return Text(snapshot.error.toString());
+          }
+          // By default show a loading spinner.
+          return const CircularProgressIndicator();
+        },
       ),
     );
   }

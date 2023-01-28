@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:nyobaauth/Screens/Welcome/welcome_screen.dart';
+import 'package:nyobaauth/Screens/history/hiss.dart';
 import 'package:nyobaauth/Screens/history/history.dart';
 import 'package:nyobaauth/Screens/ticket/ticket.dart';
 import 'package:nyobaauth/Screens/userdetails/userdetails.dart';
@@ -116,29 +117,34 @@ class HomeScreen extends StatelessWidget {
                       mainAxisSpacing: 20,
                       children: <Widget>[
                         CategoryCard(
-                          title: "?????",
-                          svgSrc: "assets/icons/human1.svg",
+                          title: "Adit",
+                          svgSrc: "assets/icons/doctorhuman.svg",
                           press: () {
 
                           },
                         ),
                         CategoryCard(
-                          title: "????",
-                          svgSrc: "assets/icons/human2.svg",
+                          title: "Akmal",
+                          svgSrc: "assets/icons/human1.svg",
                           press: () {},
                         ),
                         CategoryCard(
-                          title: "?????",
-                          svgSrc: "assets/icons/human1.svg",
+                          title: "Dito",
+                          svgSrc: "assets/icons/human2.svg",
                           press: () {
 
                           },
                         ),
                         CategoryCard(
-                          title: "????",
-                          svgSrc: "assets/icons/human2.svg",
+                          title: "Apri",
+                          svgSrc: "assets/icons/human3.svg",
                           press: () {},
                           ),
+                        CategoryCard(
+                          title: "Arsyad",
+                          svgSrc: "assets/icons/human4.svg",
+                          press: () {},
+                        ),
                       ],
                     ),
                   ),

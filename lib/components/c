@@ -73,5 +73,31 @@ return Card(
                           );
 
 
+class Transaction{
+  final int id;
+  final String tiket_number;
+  final String time;
+  final int amount;
+  final String status;
+  final int? price;
+  final int? package_id;
+  final int? user_id;
 
+  Transaction({
+    required this.id, required this.tiket_number,required this.time ,required this.amount, required this.status, required this.price, required this.package_id, required this.user_id
+  });
+
+  factory Transaction.fromJson(Map<String, dynamic> json) {
+    return Transaction(
+        id: json['id'],
+        tiket_number: json['ticket_number'],
+        time: json['time'],
+        amount: json['amount'],
+        status: json['status'],
+        price: json['price'] as int?,
+        package_id: json['package_id'] as int?,
+        user_id: json['user_id'] as int?
+    );
+  }
+}
                           child: Text(snapshot.data![index].type),

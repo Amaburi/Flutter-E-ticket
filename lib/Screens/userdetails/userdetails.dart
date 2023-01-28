@@ -2,9 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:nyobaauth/Screens/history/history.dart';
+import 'package:nyobaauth/Screens/ticket/ticket.dart';
 import 'package:nyobaauth/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../constants.dart';
 import '../Welcome/welcome_screen.dart';
 
 class userdetails extends StatefulWidget {
@@ -40,29 +44,54 @@ class _userdetailsState extends State<userdetails> {
         backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
       ),
-      bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: Colors.black,
-        animationDuration: Duration(milliseconds: 500),
-        items: [
-          GestureDetector(
-            onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 20),
+        child: GNav(
+            backgroundColor: kBackgroundColor,
+            color: kActiveIconColor,
+            activeColor: kBackgroundColor,
+            tabBackgroundColor: kActiveIconColor,
+            padding: EdgeInsets.all(18),
+            gap: 8,
+            tabs:  [
+              GButton(icon: FontAwesomeIcons.house, text: 'Home',
+                onPressed: () => {
+                  Navigator.push(context, MaterialPageRoute(builder: (context){
                     return HomeScreen();
                   },
-                ),
-              );
-            },
-            child: Icon(FontAwesomeIcons.house, color: Colors.black,),
-          ),
-          GestureDetector(
-            onTap: (){
-            },
-            child: Icon(FontAwesomeIcons.user, color: Colors.black,),
-          ),
-        ],
+                  ),
+                  )
+                },
+              ),
+              GButton(icon: FontAwesomeIcons.userAstronaut,text: 'User Details',
+                onPressed: () => {
+                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                    return userdetails();
+                  },
+                  ),
+                  )
+                },
+              ),
+              GButton(icon: FontAwesomeIcons.ticket,text: 'Ticket',
+                onPressed: () => {
+                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                    return ticket();
+                  },
+                  ),
+                  )
+                },
+              ),
+              GButton(icon: FontAwesomeIcons.history,text: 'History',
+                onPressed: () => {
+                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                    return history();
+                  },
+                  ),
+                  )
+                },
+              ),
+            ]
+        ),
       ),
       body: Column(
         children: [
